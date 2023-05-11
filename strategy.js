@@ -116,7 +116,7 @@ async function sell(connection, symbol, volume) {
 }
 var times=0
 // run main every hour 
-cron.schedule('* * * * *', () => {
+cron.schedule('0 * * * *', () => {
     console.log("%c" + 'running every hour for '+times, "color:red" + ";font-weight:bold;");
     times+=1
     main();
