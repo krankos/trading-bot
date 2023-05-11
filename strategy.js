@@ -53,11 +53,13 @@ async function main() {
 
     // strategy
     if(((lastResult.d>20 && stochastic[stochastic.length-2].d<20)|| (lastResult.d>50 && stochastic[stochastic.length-2].d<50)) && (candles[candles.length-1].close>ema[ema.length-1]) && (candles[candles.length-1].close>candles[candles.length-1].open)){
-        console.log("BUY");
+        buy(connection, 'EURUSD', 0.01)
+        // console.log("BUY");
         return;
     }
 
     if (((lastResult.d<80 && stochastic[stochastic.length-2].d>80)|| (lastResult.d<50 && stochastic[stochastic.length-2].d>50)) && (candles[candles.length-1].close<ema[ema.length-1]) && (candles[candles.length-1].close<candles[candles.length-1].open)){
+        sell(connection, 'EURUSD', 0.01)
         console.log("SELL");
         return;
     }
@@ -66,8 +68,20 @@ async function main() {
     await connection.unsubscribeFromMarketData('EURUSD');
     // await connection.disconnect();
 
+    // await connection .createMarketBuyOrder('EURUSD', 0.01,{comment: 'Buy signal'});
+
     return;
 
 }
 
 main();
+
+async function buy(connection, symbol, volume) {
+    let result = await connection.createMarketBuyOrder(symbol, volume, {comment: 'Buy signal'});
+    console.log('BUY', result);
+}
+
+async function sell(connection, symbol, volume) {
+    let result = await connection.createMarketSellOrder(symbol, volume, {comment: 'Sell signal'});
+    console.log('SELL', result);
+}
